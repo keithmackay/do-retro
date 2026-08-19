@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // ABOUTME: Extracts user prompts from a project's Claude Code transcript JSONL files.
-// ABOUTME: Outputs them as markdown grouped by date, for use in build-story generation.
+// ABOUTME: Outputs them as markdown grouped by date, for use in do-retro generation.
 
 import fs from "fs";
 import path from "path";

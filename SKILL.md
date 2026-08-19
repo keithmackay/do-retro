@@ -1,19 +1,23 @@
 ---
 name: do-retro
-description: Generate or update a docs/BUILD_STORY.md chronicling a project's development history — git commits, design decisions, and every user prompt from Claude Code transcripts — plus a retroactive-learning section of hindsight lessons. Use when the user says "build story", "document how this was built", "do a retro", "project history doc", or "do-retro".
+description: Generate or update a docs/PROJECT_HISTORY.md chronicling a project's development history — git commits, design decisions, and every user prompt from Claude Code transcripts — plus a retroactive-learning section of hindsight lessons. Supports flags to generate subsets into separate files (e.g. --prompts). Use when the user says "build story", "document how this was built", "do a retro", "project history doc", or "do-retro".
 ---
 
 # do-retro
 
-You are tasked with creating or updating a `docs/BUILD_STORY.md` file that chronicles the development of this project. This document captures the collaborative process between human and AI, including prompts, decisions, and implementation details.
+You are tasked with creating or updating a `docs/PROJECT_HISTORY.md` file that chronicles the development of this project. This document captures the collaborative process between human and AI, including prompts, decisions, and implementation details.
+
+## Step 0: Check for flags
+
+If the user's invocation included flags requesting a subset of the history (e.g. `--prompts`, `--timeline`, `--decisions`, `--learnings`), skip the full do-retro generation and follow **Generating Subsets** below instead. Otherwise proceed with the full flow.
 
 ## Step 1: Gather Context
 
 First, collect information from multiple sources:
 
-### 1.1 Check for existing BUILD_STORY.md
+### 1.1 Check for existing PROJECT_HISTORY.md
 ```bash
-cat docs/BUILD_STORY.md 2>/dev/null || echo "NO_EXISTING_FILE"
+cat docs/PROJECT_HISTORY.md 2>/dev/null || echo "NO_EXISTING_FILE"
 ```
 
 ### 1.2 Get git history
@@ -46,7 +50,7 @@ find . -type f -name "*.ts" -o -name "*.js" -o -name "*.py" -o -name "*.rs" -o -
 node ~/.claude/skills/do-retro/scripts/extract-prompts.js
 ```
 
-This outputs all user prompts from every Claude Code session for this project, grouped by date with timestamps. Include ALL of these prompts in the BUILD_STORY.md output.
+This outputs all user prompts from every Claude Code session for this project, grouped by date with timestamps. Include ALL of these prompts in the PROJECT_HISTORY.md output.
 
 ## Step 2: Analyze Current Session
 
@@ -56,14 +60,16 @@ Review the conversation history from this session to identify:
 - **Implementation details**: What was built?
 - **Key insights**: What lessons were learned?
 
-## Step 3: Generate or Update BUILD_STORY.md
+## Step 3: Generate or Update PROJECT_HISTORY.md
 
 ### If NO existing file:
 
-Create a new `docs/BUILD_STORY.md` with this structure:
+Create a new `docs/PROJECT_HISTORY.md` with this structure:
 
 ```markdown
 # How [PROJECT_NAME] Was Built
+
+> Generated using the [do-retro](https://github.com/keithmackay/mackayi) skill, from the [keithmackay/mackayi](https://github.com/keithmackay/mackayi) marketplace.
 
 This document chronicles the development of [PROJECT_NAME], including the prompts used, decisions made, and the iterative design process.
 
@@ -131,7 +137,7 @@ Include every user prompt from the extract-prompts output, organized chronologic
 
 ---
 
-*Documentation generated with Claude Code assistance.*
+*Documentation generated with Claude Code assistance, using the do-retro skill.*
 ```
 
 ### If file EXISTS:
@@ -168,15 +174,29 @@ Include every user prompt from the extract-prompts output, organized chronologic
 
 5. Update the **Prompt History** section with any new prompts not already documented.
 6. If the existing file has no **Retroactive Learning/Improvements** section, add one at the end (see guidance below). If it already has one, review it against the changes since it was last updated and append any new items — don't rewrite items already there unless they've been directly superseded.
+7. If the existing file predates the do-retro attribution line, add it directly under the title.
 
 ## Step 4: Write the File
 
-After generating the content, write it to `docs/BUILD_STORY.md`.
+After generating the content, write it to `docs/PROJECT_HISTORY.md`.
 
 If the docs/ directory doesn't exist, create it first:
 ```bash
 mkdir -p docs
 ```
+
+## Generating Subsets
+
+The user may ask for just one slice of the history instead of the full do-retro, via a flag. Each flag writes only that section to its own file in `docs/`, named `PROJECT_HISTORY_<SUBSET>.md`, and each still opens with the do-retro attribution line from Step 3. Supported flags:
+
+| Flag | Output file | Content |
+|------|-------------|---------|
+| `--prompts` | `docs/PROJECT_HISTORY_PROMPTS.md` | Run Step 1.7 (`extract-prompts.js`) and write its full output under a `## Prompt History` heading. |
+| `--timeline` | `docs/PROJECT_HISTORY_TIMELINE.md` | Run Steps 1.2–1.3 and write the `## Development Timeline` section only. |
+| `--decisions` | `docs/PROJECT_HISTORY_DECISIONS.md` | Analyze commits and session context for the `## Key Technical Decisions` table only. |
+| `--learnings` | `docs/PROJECT_HISTORY_LEARNINGS.md` | Produce the `## Retroactive Learning/Improvements` section only, per the guidance below. |
+
+Multiple flags may be passed together (e.g. `--prompts --timeline`); generate one file per flag. Each subset file is self-contained — gather only the context needed for that section (skip unrelated steps from Step 1), and write/overwrite the corresponding file directly, without touching `docs/PROJECT_HISTORY.md`.
 
 ## Retroactive Learning/Improvements
 
@@ -202,14 +222,14 @@ If nothing in the history qualifies (e.g. a young or small project), write "Noth
 
 ## Output
 
-After completing the BUILD_STORY.md, provide a brief summary:
-- Whether you created a new file or updated existing
+After completing the PROJECT_HISTORY.md (or subset files), provide a brief summary:
+- Whether you created a new file or updated existing (or which subset files were written)
 - How many sections were added
 - Key highlights captured
 
-If updating, also run:
+If updating the full file, also run:
 ```bash
-git diff docs/BUILD_STORY.md | head -100
+git diff docs/PROJECT_HISTORY.md | head -100
 ```
 
 To show what was added.
