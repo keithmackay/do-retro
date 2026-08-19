@@ -22,6 +22,7 @@ Collect information from these sources. In subset mode, run only the substeps ea
 ```bash
 cat docs/PROJECT_HISTORY.md 2>/dev/null || echo "NO_EXISTING_FILE"
 ```
+If a prior run wrote it to a non-default location (see Step 4), check there instead.
 
 ### 2.2 Get git history
 ```bash
@@ -96,10 +97,17 @@ Each subset file follows the same append-only policy as the full file (Guideline
 
 ## Step 4: Write the file(s)
 
-Write the content generated in Step 3a or 3b to disk. Create the `docs/` directory first if it doesn't exist:
+Check whether the `docs/` directory exists:
 ```bash
-mkdir -p docs
+test -d docs && echo EXISTS || echo MISSING
 ```
+
+If it's missing, ask the user where to write the output before generating anything further:
+- **Create `docs/`** — proceed as designed, writing to `docs/PROJECT_HISTORY.md` (or `docs/PROJECT_HISTORY_<SUBSET>.md` in subset mode)
+- **Use the current directory** — write `PROJECT_HISTORY.md` (or the subset files) directly at the project root instead
+- **Use a new folder** — ask for the folder name, create it (`mkdir -p <folder>`), and write there instead
+
+Once the destination is settled (or `docs/` already existed), write the content generated in Step 3a or 3b there, creating the chosen directory first if needed.
 
 ## Step 5: Report what was done
 
