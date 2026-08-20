@@ -1,0 +1,6 @@
+{
+  "name": "do-retro",
+  "version": "1.0.0",
+  "description": "Generate or update a docs/PROJECT_HISTORY.md chronicling a project's development history — git commits, design decisions, and every user prompt from Claude Code transcripts — plus a retroactive-learning section of hindsight lessons. Supports flags to generate subsets into separate files (e.g. --prompts). Use when the user says \"build history\", \"document how this was built\", \"do a retro\", \"project history doc\", or \"do-retro\".",
+  "skills": "./skills/"
+}
