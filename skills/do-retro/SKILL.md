@@ -7,6 +7,12 @@ description: Generate or update a docs/PROJECT_HISTORY.md chronicling a project'
 
 You are tasked with creating or updating `docs/PROJECT_HISTORY.md`, a document that chronicles this project's development — commits, design decisions, and every user prompt from Claude Code transcripts — for whoever reads it later to understand how and why the project was built. Follow Steps 1-5 in order.
 
+## Flags
+
+### `--help`
+
+If the user invokes this skill with a `--help` flag (e.g. `/do-retro --help`), do not run any of the steps below. Instead, read and display the contents of `help.md` (in this skill's folder) verbatim, then stop.
+
 ## Step 1: Determine mode — full history or a subset
 
 Check whether the user's invocation included a subset flag: `--prompts`, `--timeline`, `--decisions`, and/or `--learnings`.
