@@ -107,3 +107,11 @@ You can also ask for just a subset of the history, which is written to its own f
 ## How it works
 
 The skill walks git history, project metadata, and README content, then runs `scripts/extract-prompts.js` to pull every user prompt from that project's Claude Code transcripts (`~/.claude/projects/<encoded-project-path>/*.jsonl`). It writes or appends to `docs/PROJECT_HISTORY.md`, never overwriting prior sections.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for release history.
+
+## License
+
+[MIT](LICENSE)
