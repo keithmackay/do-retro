@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+- Add `--dry-run` flag: preview which output file(s) would be created/appended and a section/count summary, without writing anything
 - Document mackayi marketplace installation in README
 - Add --version flag support, reporting installed version and a best-effort GitHub update check
 - Add Changelog section to README linking CHANGELOG.md

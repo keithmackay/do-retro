@@ -20,13 +20,18 @@ USAGE
   /do-retro --timeline      Write only the Development Timeline section
   /do-retro --decisions     Write only the Key Technical Decisions table
   /do-retro --learnings     Write only the Retroactive Learning section
+  /do-retro --dry-run       Preview what would be written, without writing
   /do-retro --help          Show this message and exit
 
   Multiple subset flags may be combined, e.g. --prompts --timeline.
+  --dry-run can combine with any subset flag(s), e.g. --dry-run --prompts.
 
 FLAGS
   --prompts     Write docs/PROJECT_HISTORY_PROMPTS.md only
   --timeline    Write docs/PROJECT_HISTORY_TIMELINE.md only
   --decisions   Write docs/PROJECT_HISTORY_DECISIONS.md only
   --learnings   Write docs/PROJECT_HISTORY_LEARNINGS.md only
+  --dry-run     Walk git history/transcripts and report what would be
+                created or appended (files, sections, counts) without
+                writing anything
   --help        Show this help message without making any changes

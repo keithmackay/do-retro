@@ -111,6 +111,8 @@ You can also ask for just a subset of the history, which is written to its own f
 | `--decisions` | `docs/PROJECT_HISTORY_DECISIONS.md` |
 | `--learnings` | `docs/PROJECT_HISTORY_LEARNINGS.md` |
 
+Add `--dry-run` (alone or combined with any subset flag) to preview what would be written — which file(s) would be created or appended to, and a summary of the sections/counts that would be added — without writing anything.
+
 ## How it works
 
 The skill walks git history, project metadata, and README content, then runs `scripts/extract-prompts.js` to pull every user prompt from that project's Claude Code transcripts (`~/.claude/projects/<encoded-project-path>/*.jsonl`). It writes or appends to `docs/PROJECT_HISTORY.md`, never overwriting prior sections.

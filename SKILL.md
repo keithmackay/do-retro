@@ -30,6 +30,26 @@ If the user invokes this skill with a `--version` flag (e.g. `/do-retro --versio
    - If the API call fails for any reason (network, auth, rate limit, malformed tag): print nothing further — no status line, no error shown to the user.
 5. Stop — do not proceed to run the skill's actual workflow.
 
+### `--dry-run`
+
+If the user invokes this skill with a `--dry-run` flag (e.g. `/do-retro --dry-run`, optionally combined with a subset flag like `--dry-run --prompts`), run through Steps 1-2 exactly as normal — determine mode, walk git history, read transcripts, analyze the session — but stop before Step 3 generates any content and before Step 4 writes anything. Instead:
+
+1. Run Step 2.1 (or the subset-appropriate check) to determine whether the target file(s) already exist, so you can report **create** vs **update** accurately.
+2. Gather the same context Steps 2.2-2.8 would (full mode) or the subset's required substeps (subset mode) — this is read-only, nothing is held back here.
+3. Instead of writing, report:
+   - Which output file(s) would be created or appended to (`docs/PROJECT_HISTORY.md`, or the relevant `docs/PROJECT_HISTORY_<SUBSET>.md` file(s) in subset mode).
+   - For each: **Would create** (new file) or **Would append to** (existing file, listing which sections/subsections would gain new content — e.g. "Development Timeline: +4 entries since last run").
+   - A count-based summary per section, e.g.:
+     - "Would add 6 new timeline entries (commits since last update)"
+     - "Would add 11 new prompt excerpts across 3 sessions"
+     - "Would add a new Retroactive Learning/Improvements section with 4 items" (or "+2 items" if appending)
+     - "Would add 2 rows to the Key Technical Decisions table"
+   - If Step 2.1 (or its subset equivalent) found no existing file, say so explicitly rather than describing it as an update.
+4. If `docs/` doesn't exist yet (Step 4's normal check), report "Would prompt for output location (docs/ doesn't exist)" instead of actually asking.
+5. End with a heading **"## Dry Run — no changes were made"** above the summary, and stop — do not proceed to Step 3, Step 4, or Step 5.
+
+No files are written or modified in this mode, regardless of full or subset mode.
+
 ## Step 1: Determine mode — full history or a subset
 
 Check whether the user's invocation included a subset flag: `--prompts`, `--timeline`, `--decisions`, and/or `--learnings`.
