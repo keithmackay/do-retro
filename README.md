@@ -6,6 +6,13 @@ Generated files open with a note that they were produced using the do-retro skil
 
 ## Installation
 
+### From the mackayi marketplace (recommended)
+
+```
+/plugin marketplace add keithmackay/mackayi
+/plugin install do-retro@mackayi
+```
+
 ### Claude Code
 
 ```bash
